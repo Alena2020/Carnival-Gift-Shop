@@ -10,8 +10,12 @@ class Gift {
     }
 
     buy() {
-      console.log(`Here you go, one ${this.name}!`);
-      tickets -= this.price; 
+      if (tickets >= this.price) {
+        console.log(`Here you go, one ${this.name}!`);
+        tickets -= this.price;        
+      } else {
+        console.log(`You don't have enough tickets to buy this gift.`);        
+      }       
     }
 }
 
@@ -33,18 +37,35 @@ function printWelcoming() {
 Hello friend! Thank you for visiting the carnival!`);
 }
 
-function buyGift() {
-  let id = Number(input(`Enter the number of the gift you want to get:`));
-  let gift = gifts.find(el => el.id === id);
-  gift.buy();
-  let index = gifts.findIndex(el => el.id === id);
-  gifts.splice(index, 1);
-  checkTickets();
+function buyGift() {  
+  if (gifts.length == 0) {
+    console.log(`Wow! There are no gifts to buy.`);
+  } else {
+    let id = Number(input(`Enter the number of the gift you want to get:`));
+    if (isNaN(id)) {
+      console.log(`Please enter a valid number!`);
+    } else if (id > 10) {
+      console.log(`There is no gift with that number!`);
+    } else {
+    let gift = gifts.find(el => el.id === id);
+    gift.buy();
+    let index = gifts.findIndex(el => el.id === id);
+    gifts.splice(index, 1);
+    checkTickets();
+    }
+  }
 }
 
 function addTickets() {
-  tickets += Number(input(`Enter the ticket amount:`));
-  checkTickets();  
+  let amountTickets = Number(input(`Enter the ticket amount:`));
+  if (isNaN(amountTickets) ) {
+    console.log(`Please enter a valid number between 0 and 1000.`);
+  } else if (amountTickets < 0 || amountTickets > 1000) {
+    console.log(`Please enter a valid number between 0 and 1000.`);
+  } else {
+    tickets += amountTickets;
+    checkTickets(); 
+  } 
 }
 
 function checkTickets() {
@@ -53,9 +74,13 @@ function checkTickets() {
 
 function showGifts() {
   console.log(`Here's the list of gifts:\n`);
-  gifts.forEach( gift => {
-    console.log(`${gift.id}- ${gift.name}, Cost: ${gift.price} tickets`)
-  });
+    if (gifts.length == 0) {
+    console.log(`Wow! There are no gifts to buy.`);
+  } else {
+    gifts.forEach( gift => {
+      console.log(`${gift.id}- ${gift.name}, Cost: ${gift.price} tickets`)
+    });
+  }
 }
 
 function printMessage() {
@@ -90,7 +115,7 @@ function selectAction() {
       break;
   
     default:
-      console.log(`Wrong input`);
+      console.log(`Please enter a valid number!`);
       break;
   }
   
