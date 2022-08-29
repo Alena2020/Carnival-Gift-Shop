@@ -1,5 +1,6 @@
 let input = require('sync-input');
-let tickets = 100;
+let tickets = 0;
+let exitStatus = false;
 
 class Gift {
     constructor(name, price, id) {
@@ -36,6 +37,8 @@ function buyGift() {
   let id = Number(input(`Enter the number of the gift you want to get:`));
   let gift = gifts.find(el => el.id === id);
   gift.buy();
+  let index = gifts.findIndex(el => el.id === id);
+  gifts.splice(index, 1);
   checkTickets();
 }
 
@@ -57,11 +60,12 @@ function showGifts() {
 
 function printMessage() {
   console.log(`Have a nice day!`);
+  console.log(`\nProcess finished with exit code 0`);  
 }
 
 function selectAction() {
   let action = Number(input(`\nWhat do you want to do?
-1-Buy a gift 2-Add tickets 3-Check tickets 4-Show gifts`));
+1-Buy a gift 2-Add tickets 3-Check tickets 4-Show gifts 5-Exit the shop`));
 
   switch (action) {
     case 1:
@@ -78,16 +82,23 @@ function selectAction() {
 
     case 4:
       showGifts();   
-      break;      
+      break;
+    
+    case 5:
+      printMessage();
+      exitStatus = true;
+      break;
   
     default:
       console.log(`Wrong input`);
       break;
   }
-
-  printMessage();
+  
 }
 
-printWelcoming();
-showGifts();
-selectAction();
+  printWelcoming();
+  showGifts();
+
+while (!exitStatus) { 
+  selectAction();
+}
